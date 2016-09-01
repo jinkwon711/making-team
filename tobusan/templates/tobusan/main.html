@@ -1,0 +1,125 @@
+{% load staticfiles %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'tobusan/style_1.css' %}">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat|Work+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script>
+        $(document).ready(function(){
+
+          $(document).scroll(function() { // check if scroll event happened
+            if ($(document).scrollTop() > 500) { // check if user scrolled more than 50 from top of the browser window
+              $("#main-ul").css("background-color", "rgb(0,0,0)"); // if yes, then change the color of class "navbar-fixed-top" to white (#f8f8f8)
+              $("#main-ul").css("opacity", "0.5");
+            } else {
+              $("#base-ul").css('background-color', 'transparent');
+               // if not, change it back to transparent
+            }
+          });
+        });
+    </script>
+
+
+
+</head>
+<body>
+
+{% include 'tobusan/navbar.html' %}
+
+    <header>
+
+        <div class='search-and-nav'  >
+          <div class="background-layer">
+            <div class="container" style="top:220px;">
+            {% if request.user.is_authenticated %}
+
+
+                <div class="row" id="write-post" style="margin-bottom:70px;">
+                    <a id="write_button" class='btn btn-default' type="button" href="{% url 'post_new' %}">내 팀 만들기</a>
+                </div>
+                {% endif %}
+                <div class="row" id='main-search'>
+                    <div id='search'>
+
+                      <form action="/search/" method="get">
+                      <div class="col-sm-10">
+                        <input type="text" name="q" id='main-search-bar' label=''>
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="submit" value="Search" id='main-search-button' class='btn btn-default'>
+                      </div>
+
+
+                      </form>
+
+                    </div>
+                </div>
+
+                <div class="row" id='main-nav'>
+
+                    {% for category in categories %}
+
+                    <div class="dropdown" style="padding:0px;">
+                    <div class="dropbtn">{{category.name}}
+                    <div class="dropdown-content">
+                    {% for subcategory in category.subcategory_set.all %}
+                        <a href="/category/{{subcategory.name}}/">{{ subcategory.name }}</a>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    </div>
+              {% endfor %}
+
+
+                </div>
+
+
+            </div>
+
+          </div>
+        </div>
+
+    </header>
+    <section class="main container" style="margin-top:20px;">
+
+        <div class="row" >
+      {% for one_post in posts %}
+
+
+          <div class="col-sm-6 col-md-4">
+
+            <div class="thumbnail">
+
+                <a href="/post/{{ one_post.id }}">
+              <img class="resize" src="{{ one_post.image.url }}">
+              <div class="caption">
+                <h3>{{ one_post.title }}</h3>
+                <p><a href="/post/{{one_post.id}}" class="btn btn-default" role="button">상세보기</a></p>
+                <h4>총 {{one_post.max_member_counts}}명 중 {{one_post.apply_set.all.count}} 명 등록</h4>
+
+
+
+
+              </div>
+            </a>
+            </div>
+
+          </div>
+
+
+        {% endfor %}
+        </div>
+    </section>
+
+</body>
+
+<div class="footer">This footer will always be positioned at the bottom of the page, but <strong>not fixed</strong>.</div>

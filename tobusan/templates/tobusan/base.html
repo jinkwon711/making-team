@@ -1,0 +1,75 @@
+{% load staticfiles %}
+
+{% load crispy_forms_tags thumbnail %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="{% static 'tobusan/style_1.css' %}">
+    <title>Document</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat|Work+Sans:400,300,600' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+
+<script>
+    $(document).ready(function(){
+
+      $(document).scroll(function() { // check if scroll event happened
+        if ($(document).scrollTop() > 50) { // check if user scrolled more than 50 from top of the browser window
+          $("#base-ul").css("background-color", "#F68657"); // if yes, then change the color of class "navbar-fixed-top" to white (#f8f8f8)
+          $("#base-ul").css("opacity", "0.9");
+        } else {
+          $("#base-ul").css("background-color", "#F68657");
+           // if not, change it back to transparent
+        }
+      });
+    });
+</script>
+
+
+</head>
+
+
+<body>
+
+
+<div class="row">
+  <ul style="margin-bottom:0px;" id='base-ul'>
+    <div class="col-sm-2">
+      <li class="left" id="list"><a href="/">마무리.com</a></li>
+    </div>
+
+
+    <div class='col-sm-4' id="nav-right">
+
+
+      {% if request.user.is_authenticated %}
+        <li class="right"><a href="/mypage" >마이페이지</a></li>
+
+      <li class="right"><a href="/accounts/logout">로그아웃</a></li>
+
+      {% else %}
+      <li class="right"><a href="/accounts/register">회원가입</a></li>
+
+      <li class="right"><a href="/accounts/login">로그인</a></li>
+      {% endif %}
+    </div>
+
+  </ul>
+
+</div>
+
+{% block content %}
+
+{% endblock %}
+
+
+
+</body>
+
+<div class="footer">This footer will always be positioned at the bottom of the page, but <strong>not fixed</strong>.</div>

@@ -1,0 +1,120 @@
+{% extends 'tobusan/base.html' %}
+{% load crispy_forms_tags thumbnail %}
+
+
+
+
+{% block content %}
+
+<style>
+
+table {
+color: #000000;
+font-family: Helvetica, Arial, sans-serif;
+width: 100%;
+border-collapse:
+collapse; border-spacing: 0;
+}
+
+td, th {
+border: 1px ; /* No more visible border */
+height: 30px;
+transition: all 0.3s; /* Simple transition for hover effect */
+}
+
+th {
+ /* Darken header a bit */
+font-weight: bold;
+}
+
+td {
+text-align: center;
+}
+
+
+tr td:hover { background: #666; color: #FFF; } /* Hover cell effect! */
+
+
+</style>
+
+<div class="container" style="padding-top:100px;">
+        <a role='button' class='right btn btn-default' href="/mypage/edit">사용자정보 수정</a>
+
+    <div class="row">
+
+        <div class='col-sm-3'>
+        {% thumbnail profile.image "400x400" crop="center" as im %}
+            <img class='left round' src="{{ im.url }}" width="200" height="200" />
+        {% endthumbnail %}
+        </div>
+        <div class='col-sm-9'>
+        <h1>{{profile.user}}</h1>
+
+        <h4>{{profile.name}}</h4>
+        <h4>{{profile.gender}}</h4>
+        <h4>{{profile.interest}}</h4>
+
+
+
+ <div class='row'>
+        <div class="col-lg-12" style="padding-top:50px; padding-bottom:100px;" >
+
+        <table class ="table-bordered table-responsive" style="background:transparent;">
+                <tr>
+                    <td>관리그룹명</td>
+                    <td>그룹 보기</td>
+                </tr>
+        {% for post in posts %}
+
+                <tr>
+                    <td>
+                    {{post.title}}</td>
+                    <td>
+                        <a role="button" class="btn btn-danger btn-sm" href="/post/{{post.pk}}" style ="padding: 1px 5px;">이동</a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+        </div>
+
+
+
+
+
+    <div class='row'>
+        <div class="col-lg-12" style="padding-top:50px; padding-bottom:100px;" >
+
+        <table class ="table-bordered table-responsive" style="background:transparent;">
+                <tr>
+                    <td>그룹명</td>
+                    <td>나가기</td>
+                </tr>
+                {% for application in applications %}
+
+                <tr>
+                    <td>
+                    {{application.post.title}}
+                    </td>
+                    <td>
+                        <a role="button" class="btn btn-danger btn-sm" href="/apply_delete/{{application.post.pk}}" style ="padding: 1px 5px;">삭제</a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+        </div>
+
+
+
+
+
+
+    </div>
+
+</div>
+{% endblock %}

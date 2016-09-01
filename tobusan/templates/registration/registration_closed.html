@@ -1,0 +1,13 @@
+{% extends "tobusan/base.html" %}
+{% load i18n %}
+
+{% block content %}할
+
+<header style="background-image: url('/static/assets/img/bg-header.jpg');">
+<div class='row' style="padding-top: 100px">
+<div class='col-sm-6 col-sm-offset-3' style="color:#FFFFFF">
+	<p>{% trans "Registration is currently closed." %}</p>
+    <p>{% trans "등록 기간이 초과했습니다. 다시 시도해주세요." %}</p>
+    </div></div>
+</header>
+{% endblock %}

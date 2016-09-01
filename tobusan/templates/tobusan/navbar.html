@@ -1,0 +1,20 @@
+<nav id="nav">
+
+<ul style="margin-bottom:0px;" id='main-ul' >
+  <li class="left" id="list"><a href="/">마무리.com</a></li>
+  <div class="nav-right">
+
+      {% if request.user.is_authenticated %}
+      <li class="right"><a href="/mypage" >마이페이지</a></li>
+
+    <li class="right"><a href="/accounts/logout">로그아웃</a></li>
+
+    {% else %}
+     <li class="right"><a href="/accounts/register">회원가입</a></li>
+
+    <li class="right"><a href="/accounts/login">로그인</a></li>
+    {% endif %}
+  </div>
+
+</ul>
+</nav>

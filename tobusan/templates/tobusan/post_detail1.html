@@ -1,0 +1,141 @@
+{% extends 'tobusan/base.html' %}
+
+
+{% load crispy_forms_tags thumbnail %}
+
+{% block content %}
+    {# 성공 및 실패 메시지 #}
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        {% if message.tags == "warning" %}
+                        <li{% if message.tags %} class="alert alert-danger"{% endif %}>
+                        {% else %}
+                        <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                        {% endif %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                            {{ message }}
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+
+
+<div class='row' style="padding-top:5em">
+
+<div class="post-container">
+
+  <div class="row">
+
+  <div class="col-sm-12" style="text-align: center;">
+    <h1>{{ post.title }}</h1>
+    <p>작성자 - {{ post.author }}</p>
+  </div>
+
+  </div>
+
+  <div class="row" style="min-width: 10px; ">
+    <div class="col-sm-5" id='post-content' style="align:center;">
+    {% thumbnail post.image "400x400" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="350" height="350" />
+        {% endthumbnail %}
+    </div>
+    <div class="col-sm-7" style="margin-top:30px;">
+          <h4>{{ post.content|linebreaks }}</h4>
+</div>
+
+    </div>
+
+    <div class="row" id='list-applicant'>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-sm-8">
+      <div id="post-comment-list">
+
+        {% for tag in tags %}
+        {{ tag }}
+        {% endfor %}
+
+        {% for comment in comment_list %}
+        {% thumbnail comment.author.profile.image "100x100" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="50" height="50" />
+        {% endthumbnail %}
+        {{ comment.content }} by {{comment.author}}
+        <br>
+
+        {% endfor %}
+      </div>
+
+      <div id="post-comment-write">
+        <h4>댓글</h4>
+        <div class="row">
+
+            <form method="post" action=".">
+            {% csrf_token %}
+            <div class="col-sm-9">
+              {{ form|crispy }}
+            </div>
+            <div class="col-sm-3">
+              <input class='btn btn-block btn-primary' type="submit" value="제출"id='comment-button'/>
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+          </div>
+          </div>
+    </div>
+
+    <h4>총 {{post.max_member_counts}}명 중 {{post.apply_set.all.count}} 명 등록
+    {% if request.user == post.author %}
+
+      <h4>등록자 목록</h4>
+      <div id="post-applicant">
+          {% for application in applications %}
+
+           <p><img src="{{ application.user.profile.image.url }}" style ='width:50px; height:50px;'alt="">
+        {{ application.user.username }}</p>
+            <a href='/post_apply/{{ post.pk }}/del/{{application.user.pk}}' role='button'>강제 퇴출</a>
+          {% endfor %}
+
+
+    {% else %}
+      {% if applicants %}
+
+    <p><img src="{{ request.user.profile.image.url }}" style ='width:50px; height:50px;'alt="">
+{{request.user.username }}</p>
+            <a href='/apply_delete/{{ post.pk }}' role='button'>그룹 나가기</a>
+      {% else %}
+      <form>
+        <a role='button' href="/post_apply/{{post.pk}}" class='btn btn-block btn-primary' id='comment-button'>무리 등록하기</a>
+     </form>
+
+
+      {% endif %}
+
+         {% endif %}
+        </div>
+
+
+{% if request.user == post.author %}
+      <a href="/post/{{post.id}}/edit">수정</a><br>
+      <a href="/post/{{post.id}}/del">삭제</a>
+{% endif%}
+ </div>
+</div>
+</div>
+
+
+
+
+
+
+
+</div>
+
+
+
+</div>
+{% endblock %}

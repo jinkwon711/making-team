@@ -1,0 +1,37 @@
+{% extends 'tobusan/base.html' %}
+
+
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<header>
+</header>
+<body>
+
+<div class='row'>
+<div class='col-sm-6 col-sm-offset-3' >
+<h1>회원가입</h1>
+<form method="post" action=".">
+  {% csrf_token %}
+  {{ form|crispy }}
+
+  <input class='btn btn-block btn-primary' type="submit" value="{% trans '회원가입' %}" />
+  <input type="hidden" name="next" value="{{ next }}" />
+</form>
+</div>
+
+
+<hr/>
+<div class='row'>
+<div class='col-sm-6 col-sm-offset-3 text-align-center' style="color:#000000">
+<p><a href="{% url 'auth_login' %}">로그인이(LogIn)</a>필요하세요?</p>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}

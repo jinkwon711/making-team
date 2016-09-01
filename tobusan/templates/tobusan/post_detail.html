@@ -1,0 +1,189 @@
+{% load crispy_forms_tags thumbnail %}
+
+<html>
+	<head>
+		<title>MaMuri</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" href="/static/tobusan/assets/css/main.css" />
+        <link rel="stylesheet" type="text/css" href="/static/tobusan/style_1.css">
+	</head>
+	<body id="top">
+{% include 'tobusan/navbar.html' %}
+		<!-- Header -->
+			<header id="header">
+				<div class="inner">
+
+
+
+        {% thumbnail post.image "400x400" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="300" height="300" />
+        {% endthumbnail %}
+                    <br />
+
+				</div>
+			</header>
+
+     {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        {% if message.tags == "warning" %}
+                        <li{% if message.tags %} class="alert alert-danger"{% endif %}>
+                        {% else %}
+                        <li{% if message.tags %} class="alert alert-{{ message.tags }}"{% endif %}>
+                        {% endif %}
+                            {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}Important: {% endif %}
+                            {{ message }}
+
+                        </li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+		<!-- Main -->
+			<div id="main">
+
+				<!-- One -->
+					<section id="one">
+						<header class="major">
+							<h2>{{ post.title }} by {{ post.author }}</h2>
+						</header>
+						<p>{{post.content|linebreaks}}<p>
+						<ul class="actions">
+
+                        <hr>
+                        <p>
+                        {% for tag in tags %}
+                        #{{ tag }}
+                        {% endfor %}
+						</ul>
+                        <hr>
+{% if applicants %}
+
+        <div class='row' style="padding-top:50px; padding-bottom:100px;" >
+
+
+        <table class ="table-bordered table-responsive" style="background:transparent;">
+                <tr>
+                    <td>프로필</td>
+                    <td>댓글</td>
+                    <td>이름</td>
+                    <td>삭제</td>
+
+                </tr>
+                              {% for comment in comment_list %}
+
+                <tr>
+                    <td>
+            {% thumbnail comment.author.profile.image "100x100" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="50" height="50" />
+             {% endthumbnail %}</td>
+                    <td>
+                     {{ comment.content }}
+                    </td>
+                    <td>
+                    {{comment.author}}
+                    </td>
+                    <td>
+                    <a role='button' href ="/post/{{post.pk}}/comment_del/{{comment.pk}}/">삭제</a>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+        </div>
+
+
+
+
+            <form method="post" action=".">
+            {% csrf_token %}
+              {{ form|crispy }}
+              <input class="" type="submit" value="제출"id='comment-button'/>
+
+
+            <input type="hidden" name="next" value="{{ next }}" />
+            </form>
+ {% else %}
+
+  <h3>무리에 등록하고 댓글 사용하세요</h3>
+  {% endif %}
+
+
+            <h4>총 {{post.max_member_counts}}명 중 {{post.apply_set.all.count}} 명 등록
+
+
+
+    {% if request.user == post.author %}
+
+      <h4>등록자 목록</h4>
+      <div id="post-applicant">
+          {% for application in applications %}
+          <p>{% thumbnail application.user.profile.image "100x100" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="50" height="50" />
+             {% endthumbnail %}
+
+        {{ application.user.username }}</p>
+            <a href='/post_apply/{{ post.pk }}/del/{{application.user.pk}}' role='button'>강제 퇴출</a>
+          {% endfor %}
+          <hr>
+
+
+    {% else %}
+      {% if applicants %}
+
+    <p>{% thumbnail request.user.profile.image "100x100" crop="center" as im %}
+            <img class='round' src="{{ im.url }}" width="50" height="50" />
+             {% endthumbnail %}
+
+        {{ request.user.username }}</p>
+            <a href='/apply_delete/{{ post.pk }}' role='button'>그룹 나가기</a>
+      {% else %}
+      <form>
+        <a role='button' href="/post_apply/{{post.pk}}" class='btn btn-block btn-primary' id='comment-button'>무리 등록하기</a>
+     </form>
+</div>
+
+      {% endif %}
+
+         {% endif %}
+
+
+
+{% if request.user == post.author %}
+      <a role ="button" href="/post/{{post.id}}/edit">수정</a><br>
+      <a role="button" href="/post/{{post.id}}/del">삭제</a>
+{% endif%}
+ </div>
+</div>
+</div>
+
+
+					</section>
+
+
+		<!-- Footer -->
+			<footer id="footer">
+				<div class="inner">
+					<ul class="icons">
+						<li><a href="#" class="icon fa-twitter"><span class="label">Twitter</span></a></li>
+						<li><a href="#" class="icon fa-github"><span class="label">Github</span></a></li>
+						<li><a href="#" class="icon fa-dribbble"><span class="label">Dribbble</span></a></li>
+						<li><a href="#" class="icon fa-envelope-o"><span class="label">Email</span></a></li>
+					</ul>
+					<ul class="copyright">
+						<li>&copy; Untitled</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
+					</ul>
+				</div>
+			</footer>
+
+		<!-- Scripts -->
+			<script src="/static/tobusan/assets/js/jquery.min.js"></script>
+			<script src="/static/tobusan/assets/js/jquery.poptrox.min.js"></script>
+			<script src="/static/tobusan/assets/js/skel.min.js"></script>
+			<script src="/static/tobusan/assets/js/util.js"></script>
+			<!--[if lte IE 8]><script src="/static/tobusan/assets/js/ie/respond.min.js"></script><![endif]-->
+			<script src="/static/tobusan/assets/js/main.js"></script>
+
+	</body>
+</html>

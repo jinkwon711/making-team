@@ -1,0 +1,21 @@
+{% extends "tobusan/base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<header style="background-image: url('/static/assets/img/bg-header.jpg');">
+<div class='row' style="padding-top: 100px">
+<div class='col-sm-6 col-sm-offset-3' style="color:#FFFFFF">
+<h3>인증메일이 발송되었습니다.</h3>
+<h3>가입 완료를 위해 이메일 인증을 해주세요.</h3>
+<br />
+<h3>You are now registered. Activation email sent.</h3>
+<h3>Please check your email.</h3>
+</div>
+</div>
+</header>
+<!-- <header style="background-image: url('/static/assets/img/bg-header.jpg');">
+<p>{% trans "You are now registered. Activation email sent." as message %}</p>
+<p>{{ message }} </p>
+</header> -->
+{% endblock %}
